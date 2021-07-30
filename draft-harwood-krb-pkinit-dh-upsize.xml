@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!ENTITY rfc2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY rfc2412 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2412.xml">
+<!ENTITY rfc2631 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2631.xml">
+<!ENTITY rfc3526 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3526.xml">
+<!ENTITY rfc4120 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4120.xml">
+<!ENTITY rfc4556 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4556.xml">
+]>
+<?xml-stylesheet type="text/xsl" href="rfc2629.xslt"?>
+
+<?rfc compact="yes"?>
+<?rfc subcompact="no"?>
+<?rfc toc="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc rfcedstyle="yes"?>
+<?rfc autobreaks="yes"?>
+<?rfc docmapping="yes"?>
+
+<rfc category="std" docName="draft-harwood-krb-pkinit-dh-upsize-00"
+     ipr="trust200902" updates="4556" consensus="true">
+    <front>
+        <title abbrev="PKINIT DH Modulus Size">
+            Deprecate Use of 1024-bit Diffie-Hellman Moduli in Public Key
+            Cryptography for Initial Authentication in Kerberos
+        </title>
+
+        <author fullname="Robbie Harwood" initials="R." surname="Harwood">
+            <organization>Red Hat, Inc.</organization>
+            <address>
+                <email>rharwood@redhat.com</email>
+            </address>
+        </author>
+        <date year="2021" month="July" day="29" />
+        <area>sec</area>
+        <!-- <workgroup>Whatever WG adopts us, if any</workgroup> -->
+        <abstract>
+            <t>Public Key Cryptography for Initial Authentication in Kerberos
+            (PKINIT) permits a client and a Kerberos Domain Controller (KDC)
+            to use a Diffie-Hellman (DH) exchange to derive an encryption key.
+            The group with minimum modulus size permitted for this exchange is
+            1024 bits, which recent security research has shown to provide
+            insufficient protection against organizations with sufficient
+            computing resources, such as state-sponsored actors.  This
+            document updates RFC 4556 to increase the minimum group size to
+            2048 bits.</t>
+        </abstract>
+    </front>
+    <middle>
+        <section title="Introduction">
+            <t><xref target="RFC4556" /> specified three permitted groups for
+            DH, which have modulus sizes 1024, 2048, and 4096 bits,
+            respectively.  It requires implementation of the 1024-bit and
+            2048-bit groups, while the 4096-bit group is optional albeit
+            recommended.  This document updates <xref target="RFC4556" />
+            such that the 1024-bit group is no longer permitted and
+            impleentation of the 4096-bit group is required based on more
+            recent understanding of DH group weaknesses <xref target="LOGJAM"
+            />.</t>
+        </section>
+
+        <section title="Conventions used in this document">
+            <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+            NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL"
+            in this document are to be interpreted as described in <xref
+            target="RFC2119"/>.</t>
+        </section>
+
+        <section title="Modulus Size Increaess">
+            <t>In 2015, <xref target="LOGJAM" /> showed by example that it is
+            very possible to break 768-bit DH groups.  The authors extend
+            their method to 1024-bit DH groups as well, and their analysis
+            shows breaking 1024-bit DH groups to be within the reach of
+            state-sponsored actors (or others with that level of computing
+            resources).  Accordingly, this document prohibits the use of the
+            previously permitted 1024-bit group and recommends the use of the
+            4096-bit group.</t>
+            
+            <t><xref target="RFC4556" /> specifies three groups that can be
+            used for Diffie-Hellman (DH) <xref target="RFC2631" /> key
+            exchange between the client and Kerberos Domain Controller (KDC)
+            <xref target="RFC4120" />: Oakley 1024-bit Modular Exponential
+            (MODP) well-known group 2 from <xref target="RFC2412" />, Oakley
+            2048-bit MODP well-known group 14 from <xref target="RFC3526" />,
+            and Oakley 4096-bit MODP well-known group 16 from <xref
+            target="RFC3526" />.  Of the three, implementations were required
+            to support the 1024-bit and 2048-bit groups, while the 4096-bit
+            group was optional.</t>
+
+            <t>Specifically, this document updates <xref target="RFC4556" />
+            Section 3.2.1, Item 8, Paragraph 1 as follows:</t>
+
+            <ul>
+                <li>
+                    implementations MUST NOT support Oakley 1024-bit MODP
+                    well-known group 2 <xref target="RFC2412" />
+                </li>
+
+                <li>
+                    implementations MAY support Oakley 2048-bit MODP
+                    well-known group 14 <xref target="RFC3526" />
+                </li>
+
+                <li>
+                    implementations MUST support Oakley 4096-bit MODP
+                    well-known group 16 <xref target="RFC3526" />
+                </li>
+            </ul>
+        </section>
+
+        <section title="Interoperaility">
+            <t><xref target="RFC4556" /> mandated the implemention of two
+            groups (of modulus size 1024-bit and 2048-bit respecitively).
+            While this document prohibits use of the 1024-bit group, use of
+            the 2048-bit group is still permitted.  Thus, pre-existing
+            implementations could use either that 2048-bit group or the
+            optional 4096-bit group for communication with an implementation
+            that conforms to this document.</t>
+
+            <t><xref target="RFC4556" /> permits KDC policy to reject DH
+            groups with error code KDC_ERR_DH_KEY_PARAMETERS_NOT_ACCEPTED.
+            Conforming implementations are thus already prepared to handle
+            group selection failure.  Two major implementations of Kerberos,
+            MIT krb5 and Heimdal, have a configuration option for group
+            selection (pkinit_dh_min_bits).  In particular, the default value
+            has always been 2048 for MIT krb5, which added PKINIT support in
+            2007.</t>
+        </section>
+
+        <section title="Security Considerations">
+            <t>The security considerations of <xref target="RFC4556" />
+            continue to apply.  As that document states:</t>
+
+            <blockquote>
+                Kerberos error messages are not integrity protected; as a
+                result, the domain parameters sent by the KDC as
+                TD-DH-PARAMETERS can be tampered with by an attacker so that
+                the set of domain parameters selected could be either weaker
+                or not mutually preferred.  Local policy can configure sets of
+                domain parameters acceptable locally, or disallow the
+                negotiation of DH domain parameters.
+            </blockquote>
+
+            <t>By removing known-dangerous groups, this document attempts to
+            mitigate this attack.  This document also permits implementation
+            of only the 4096-bit group, which would effectively disallow
+            parameter negotiation.  However, as the field remains unprotected,
+            it is still subject to Denial of Service from tampering in
+            transit.</t>
+        </section>
+
+        <section title="IANA Considerations">
+            <t>There are no IANA actions requested by this document.</t>
+        </section>
+    </middle>
+
+    <back>
+        <references title="Normative References">
+            &rfc2119;
+            &rfc2412;
+            &rfc2631;
+            &rfc3526;
+            &rfc4120;
+            &rfc4556;
+        </references>
+
+        <references title="Informative References">
+            <reference
+                anchor="LOGJAM"
+                target="https://weakdh.org/imperfect-forward-secrecy-ccs15.pdf">
+                <front>
+                    <title>
+                        Imperfect Forward Secrect: How Diffie-Hellman Fails
+                        in Practice
+                    </title>
+                    <author surname="Adrian" initials="D." />
+                    <author surname="Bhargavan" initials="K." />
+                    <author surname="Durumeric" initials="Z." />
+                    <author surname="Gaudry" initials="P." />
+                    <author surname="Green" initials="M." />
+                    <author surname="Halderman" initials="J." />
+                    <author surname="Heninger" initials="N." />
+                    <author surname="Springall" initials="D." />
+                    <author surname="Thome" initials="E." />
+                    <author surname="Valenta" initials="L." />
+                    <author surname="VanderSloot" initials="B." />
+                    <author surname="Wustrow" initials="E." />
+                    <author surname="Zanella-Beguelin" initials="S." />
+                    <author surname="Zimmermann" initials="P." />
+                    <!-- This comment is structural.  If it is removed,
+                         xml2rfc will fail to generate HTML (but text will be
+                         fine). -->
+                </front>
+                <refcontent>
+                    ACM Conference on Computer and Communications
+                    Security (CCS) 2015, DOI 10.1145/2810103.2813707, 2015
+                </refcontent>
+            </reference>
+        </references>
+
+        <section title="Acknowledgements">
+            <t>This document builds on prior work by the IETF CURves,
+            Deprecating and a Little more Encryption Working Group (curdle),
+            especially that of Loganaden Velvindron and Mark
+            D.&nbsp;Baushke.</t>
+        </section>
+    </back>
+</rfc>
