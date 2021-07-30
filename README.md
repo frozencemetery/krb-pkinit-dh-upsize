@@ -5,7 +5,7 @@ which [the
 I-D](https://datatracker.ietf.org/doc/draft-harwood-krb-pkinit-dh-upsize/) is
 generated.
 
-While PRs are welcomed, 
+PRs are welcome, but should probably be discussed beforehand.
 
 # Contributing
 
