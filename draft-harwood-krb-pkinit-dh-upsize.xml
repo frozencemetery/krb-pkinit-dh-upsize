@@ -55,7 +55,7 @@
             2048-bit groups, while the 4096-bit group is optional albeit
             recommended.  This document updates <xref target="RFC4556" />
             such that the 1024-bit group is no longer permitted and
-            impleentation of the 4096-bit group is required based on more
+            implementation of the 4096-bit group is required based on more
             recent understanding of DH group weaknesses <xref target="LOGJAM"
             />.</t>
         </section>
@@ -67,7 +67,7 @@
             target="RFC2119"/>.</t>
         </section>
 
-        <section title="Modulus Size Increaess">
+        <section title="Modulus Size Increases">
             <t>In 2015, <xref target="LOGJAM" /> showed by example that it is
             very possible to break 768-bit DH groups.  The authors extend
             their method to 1024-bit DH groups as well, and their analysis
@@ -109,9 +109,9 @@
             </ul>
         </section>
 
-        <section title="Interoperaility">
-            <t><xref target="RFC4556" /> mandated the implemention of two
-            groups (of modulus size 1024-bit and 2048-bit respecitively).
+        <section title="Interoperability">
+            <t><xref target="RFC4556" /> mandated the implementation of two
+            groups (of modulus size 1024-bit and 2048-bit respectively).
             While this document prohibits use of the 1024-bit group, use of
             the 2048-bit group is still permitted.  Thus, pre-existing
             implementations could use either that 2048-bit group or the
@@ -199,7 +199,7 @@
             </reference>
         </references>
 
-        <section title="Acknowledgements">
+        <section title="Acknowledgments">
             <t>This document builds on prior work by the IETF CURves,
             Deprecating and a Little more Encryption Working Group (curdle),
             especially that of Loganaden Velvindron and Mark
