@@ -44,7 +44,8 @@
             insufficient protection against organizations with sufficient
             computing resources, such as state-sponsored actors.  This
             document updates RFC 4556 to increase the minimum group size to
-            2048 bits.</t>
+            2048 bits and define permitted groups of size larger than
+            4096-bits.</t>
         </abstract>
     </front>
     <middle>
@@ -57,7 +58,7 @@
             such that the 1024-bit group is no longer permitted and
             implementation of the 4096-bit group is required based on more
             recent understanding of DH group weaknesses <xref target="LOGJAM"
-            />.</t>
+            />.  It also defines two larger groups for futureproofing.</t>
         </section>
 
         <section title="Conventions used in this document">
@@ -94,7 +95,8 @@
             <ul>
                 <li>
                     implementations MUST NOT support Oakley 1024-bit MODP
-                    well-known group 2 <xref target="RFC2412" />
+                    well-known group 2 <xref target="RFC2412" /> or any other
+                    group with modulus size strictly less than 2048 bits
                 </li>
 
                 <li>
@@ -107,6 +109,13 @@
                     well-known group 16 <xref target="RFC3526" />
                 </li>
             </ul>
+        </section>
+
+        <section title="Additional Groups">
+            <t>For futureproofing, we define two additional DH groups with
+            larger modulus size.  Implementations MAY support 6114-bit MODP
+            group 17 and/or 8192-bit MODP group 18, both as defined by <xref
+            target="RFC3526" />.</t>
         </section>
 
         <section title="Interoperability">
