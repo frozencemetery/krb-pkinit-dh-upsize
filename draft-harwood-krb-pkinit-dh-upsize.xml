@@ -18,7 +18,7 @@
 <?rfc autobreaks="yes"?>
 <?rfc docmapping="yes"?>
 
-<rfc category="std" docName="draft-harwood-krb-pkinit-dh-upsize-00"
+<rfc category="std" docName="draft-harwood-krb-pkinit-dh-upsize-01"
      ipr="trust200902" updates="4556" consensus="true">
     <front>
         <title abbrev="PKINIT DH Modulus Size">
@@ -32,7 +32,7 @@
                 <email>rharwood@redhat.com</email>
             </address>
         </author>
-        <date year="2021" month="July" day="29" />
+        <date year="2021" month="August" day="06" />
         <area>sec</area>
         <!-- <workgroup>Whatever WG adopts us, if any</workgroup> -->
         <abstract>
